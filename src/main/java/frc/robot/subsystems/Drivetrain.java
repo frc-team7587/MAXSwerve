@@ -168,7 +168,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * 
+     * Returns the angle of the robot.
      * @return The angle of the robot.
      */
     public double getAngle() {
