@@ -13,12 +13,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
@@ -42,7 +43,7 @@ public class Drivetrain extends SubsystemBase {
         DriveConstants.kRearRightTurningMotorID,
         DriveConstants.kBackRightChassisAngularOffset);
 
-    private final ADIS16470_IMU gyro = new ADIS16470_IMU();
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     // Slew rate filter variables for controlling lateral acceleration
     private double currentRotation = 0.0;
@@ -56,7 +57,7 @@ public class Drivetrain extends SubsystemBase {
     // Odometry class for tracking robot pose
     SwerveDriveOdometry odometry = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics,
-        Rotation2d.fromDegrees(gyro.getAngle(IMUAxis.kZ)),
+        Rotation2d.fromDegrees(getAngle()),
         new SwerveModulePosition[] {
             frontLeftModule.getPosition(),
             frontRightModule.getPosition(),
@@ -143,7 +144,7 @@ public class Drivetrain extends SubsystemBase {
                         xSpeedDelivered,
                         ySpeedDelivered,
                         rotationDelivered,
-                        Rotation2d.fromDegrees(gyro.getAngle(IMUAxis.kZ)))
+                        Rotation2d.fromDegrees(getAngle()))
                     : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotationDelivered));
         
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
@@ -156,7 +157,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         odometry.update(
-            Rotation2d.fromDegrees(gyro.getAngle(IMUAxis.kZ)),
+            Rotation2d.fromDegrees(getAngle()),
             new SwerveModulePosition[] {
                     frontLeftModule.getPosition(),
                     frontRightModule.getPosition(),
@@ -164,6 +165,14 @@ public class Drivetrain extends SubsystemBase {
                     rearRightModule.getPosition()
             }
         );
+    }
+
+    /**
+     * 
+     * @return The angle of the robot.
+     */
+    public double getAngle() {
+        return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
     /**
@@ -180,7 +189,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(
-            Rotation2d.fromDegrees(gyro.getAngle(IMUAxis.kZ)),
+            Rotation2d.fromDegrees(getAngle()),
             new SwerveModulePosition[] {
                 frontLeftModule.getPosition(),
                 frontRightModule.getPosition(),
@@ -230,7 +239,7 @@ public class Drivetrain extends SubsystemBase {
      * @return the robot's heading in degrees, from -180 to 180
      */
     public double getHeading() {
-        return Rotation2d.fromDegrees(gyro.getAngle(IMUAxis.kZ)).getDegrees();
+        return Rotation2d.fromDegrees(getAngle()).getDegrees();
     }
 
     /**
@@ -238,6 +247,6 @@ public class Drivetrain extends SubsystemBase {
      * @return The turn rate of the robot, in degrees per second
      */
     public double getTurnRate() {
-        return gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+        return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
     }
 }
