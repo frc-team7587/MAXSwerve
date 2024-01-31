@@ -75,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
      * @param xSpeed                Speed of the robot in the x direction (forward).
      * @param ySpeed                Speed of the robot in the y direction (sideways).
      * @param rotation              Angular rate of the robot.
-     * @param isFieldRelative         Whether the provided x and y speeds are relative to the field.
+     * @param isFieldRelative       Whether the provided x and y speeds are relative to the field.
      * @param isRateLimitEnabled    Whether to enable rate limiting for smoother control.
      */
     public void drive(double xSpeed, double ySpeed, double rotation, boolean isFieldRelative, boolean isRateLimitEnabled) {
