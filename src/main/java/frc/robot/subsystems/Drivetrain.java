@@ -75,10 +75,10 @@ public class Drivetrain extends SubsystemBase {
      * @param xSpeed                Speed of the robot in the x direction (forward).
      * @param ySpeed                Speed of the robot in the y direction (sideways).
      * @param rotation              Angular rate of the robot.
-     * @param isFieldRelative       Whether the provided x and y speeds are relative to the field.
+     * @param fieldRelative         Whether the provided x and y speeds are relative to the field.
      * @param isRateLimitEnabled    Whether to enable rate limiting for smoother control.
      */
-    public void drive(double xSpeed, double ySpeed, double rotation, boolean isFieldRelative, boolean isRateLimitEnabled) {
+    public void drive(double xSpeed, double ySpeed, double rotation, boolean fieldRelative, boolean isRateLimitEnabled) {
         double xSpeedCommand;
         double ySpeedCommand;
 
@@ -139,13 +139,13 @@ public class Drivetrain extends SubsystemBase {
         double rotationDelivered = currentRotation * DriveConstants.kMaxAngularSpeed;
 
         var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-            isFieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeedDelivered,
-                    ySpeedDelivered,
-                    rotationDelivered,
-                    Rotation2d.fromDegrees(getAngle()))
-                : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotationDelivered));
+                fieldRelative
+                    ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                        xSpeedDelivered,
+                        ySpeedDelivered,
+                        rotationDelivered,
+                        gyro.getRotation2d())
+                    : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotationDelivered));
         
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
         frontLeftModule.setDesiredState(swerveModuleStates[0]);
@@ -168,7 +168,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Returns the angle of the robot.
+     * 
      * @return The angle of the robot.
      */
     public double getAngle() {
