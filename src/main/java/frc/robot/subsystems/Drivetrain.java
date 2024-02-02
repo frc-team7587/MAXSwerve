@@ -144,7 +144,7 @@ public class Drivetrain extends SubsystemBase {
                     xSpeedDelivered,
                     ySpeedDelivered,
                     rotationDelivered,
-                    Rotation2d.fromDegrees(getAngle()))
+                    gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotationDelivered));
         
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
