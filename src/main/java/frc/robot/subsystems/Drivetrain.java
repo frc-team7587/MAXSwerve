@@ -67,7 +67,9 @@ public class Drivetrain extends SubsystemBase {
     );
 
     /** Creates a new DriveSubsystem. */
-    public Drivetrain() {}
+    public Drivetrain() {
+        zeroHeading();
+    }
 
     /**
      * Drives the robot.
