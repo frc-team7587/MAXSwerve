@@ -28,15 +28,15 @@ public class Drivetrain extends SubsystemBase {
         DriveConstants.kFrontLeftTurningMotorID,
         DriveConstants.kFrontLeftChassisAngularOffset);
 
-    private final SwerveModule frontRightModule = new SwerveModule(
-        DriveConstants.kFrontRightDrivingMotorID,
-        DriveConstants.kFrontRightTurningMotorID,
-        DriveConstants.kFrontRightChassisAngularOffset);
-
     private final SwerveModule rearLeftModule = new SwerveModule(
         DriveConstants.kRearLeftDrivingMotorID,
         DriveConstants.kRearLeftTurningMotorID,
         DriveConstants.kBackLeftChassisAngularOffset);
+
+    private final SwerveModule frontRightModule = new SwerveModule(
+        DriveConstants.kFrontRightDrivingMotorID,
+        DriveConstants.kFrontRightTurningMotorID,
+        DriveConstants.kFrontRightChassisAngularOffset);
 
     private final SwerveModule rearRightModule = new SwerveModule(
         DriveConstants.kRearRightDrivingMotorID,
@@ -68,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
 
     /** Creates a new DriveSubsystem. */
     public Drivetrain() {
-        zeroHeading();
+        resetHeading();
     }
 
     /**
@@ -161,10 +161,10 @@ public class Drivetrain extends SubsystemBase {
         odometry.update(
             Rotation2d.fromDegrees(getAngle()),
             new SwerveModulePosition[] {
-                    frontLeftModule.getPosition(),
-                    frontRightModule.getPosition(),
-                    rearLeftModule.getPosition(),
-                    rearRightModule.getPosition()
+                frontLeftModule.getPosition(),
+                frontRightModule.getPosition(),
+                rearLeftModule.getPosition(),
+                rearRightModule.getPosition()
             }
         );
     }
@@ -232,7 +232,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /** Zeroes the heading of the robot. */
-    public void zeroHeading() {
+    public void resetHeading() {
         gyro.reset();
     }
 
