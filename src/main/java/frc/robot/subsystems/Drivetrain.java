@@ -73,7 +73,6 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Drives the robot.
-     *
      * @param xSpeed                Speed of the robot in the x direction (forward).
      * @param ySpeed                Speed of the robot in the y direction (sideways).
      * @param rotation              Angular rate of the robot.
@@ -225,10 +224,10 @@ public class Drivetrain extends SubsystemBase {
 
     /** Resets the drive encoders to currently read a position of 0. */
     public void resetEncoders() {
-        frontLeftModule.resetEncoders();
-        rearLeftModule.resetEncoders();
-        frontRightModule.resetEncoders();
-        rearRightModule.resetEncoders();
+        frontLeftModule.resetEncoder();
+        rearLeftModule.resetEncoder();
+        frontRightModule.resetEncoder();
+        rearRightModule.resetEncoder();
     }
 
     /** Zeroes the heading of the robot. */
