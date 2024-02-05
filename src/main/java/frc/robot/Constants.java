@@ -14,10 +14,10 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class DriveConstants {
         // Allowed maximum speeds of the robot
-        public static final double kMaxSpeed = 4.8; // meters per second
-        public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+        public static final double kMaxSpeed = 4.8; // m/s
+        public static final double kMaxAngularSpeed = 2 * Math.PI; // rad/s
 
-        public static final double kDirectionSlewRate = 1.2; // radians per second
+        public static final double kDirectionSlewRate = 1.2; // rad/s
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
@@ -75,11 +75,11 @@ public final class Constants {
         public static final double kDrivingEncoderPositionFactor = (kWheelDiameter * Math.PI) / kDrivingMotorReduction; // meters
         public static final double kDrivingEncoderVelocityFactor = ((kWheelDiameter * Math.PI) / kDrivingMotorReduction) / 60.0; // meters per second
 
-        public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
-        public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+        public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // rad
+        public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // rad/s
 
-        public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
-        public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
+        public static final double kTurningEncoderPositionPIDMinInput = 0; // rad
+        public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // rad
 
         public static final double kDrivingP = 0.04;
         public static final double kDrivingI = 0;
@@ -108,10 +108,10 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeed = 3; // meters per second squared
-        public static final double kMaxAcceleration = 3; // meters per second squared
-        public static final double kMaxAngularSpeed = Math.PI; // radians per second
-        public static final double kMaxAngularAcceleration = Math.PI; // radians per second squared
+        public static final double kMaxSpeed = 3; // m/s^2
+        public static final double kMaxAcceleration = 3; // m/s^2
+        public static final double kMaxAngularSpeed = Math.PI; // rad/s
+        public static final double kMaxAngularAcceleration = Math.PI; // rad/s^2
 
         public static final double kPXController = 1;
         public static final double kPYController = 1;
