@@ -68,14 +68,11 @@ public class SwerveUtils {
 
         if (angle == twoPi) { // Handle this case separately to avoid floating point errors with the floor after the division in the case below
             return 0.0;
-        }
-        else if (angle > twoPi) {
+        } else if (angle > twoPi) {
             return angle - twoPi * Math.floor(angle / twoPi);
-        }
-        else if (angle < 0.0) {
+        } else if (angle < 0.0) {
             return angle + twoPi * (Math.floor((-angle) / twoPi) + 1);
-        }
-        else {
+        } else {
             return angle;
         }
     }
