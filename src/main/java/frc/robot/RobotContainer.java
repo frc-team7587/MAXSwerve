@@ -37,24 +37,19 @@ public class RobotContainer {
 
     XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
     public RobotContainer() {
-        // Configure the button bindings
         configureButtonBindings();
 
-        // Configure default commands
         drivetrain.setDefaultCommand(
             // The left stick controls translation of the robot.
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> drivetrain.drive(
-                        -MathUtil.applyDeadband(0.3 * driverController.getLeftY(), OIConstants.kDriveDeadband), // forward-backward movement
-                        -MathUtil.applyDeadband(0.3 * driverController.getLeftX(), OIConstants.kDriveDeadband), // sideways movement
-                        -MathUtil.applyDeadband(0.5 * driverController.getRightX(), OIConstants.kDriveDeadband), // rotation
-                        true, // field-relative
-                        true  // rate limiting
+                    -MathUtil.applyDeadband(0.3 * driverController.getLeftY(), OIConstants.kDriveDeadband), // forward-backward movement
+                    -MathUtil.applyDeadband(0.3 * driverController.getLeftX(), OIConstants.kDriveDeadband), // sideways movement
+                    -MathUtil.applyDeadband(0.5 * driverController.getRightX(), OIConstants.kDriveDeadband), // rotation
+                    true, // field-relative
+                    true  // rate limitings
                 ), drivetrain
             )
         );
@@ -83,36 +78,35 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
-                AutoConstants.kMaxSpeed,
-                AutoConstants.kMaxAcceleration)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(DriveConstants.kDriveKinematics);
+            AutoConstants.kMaxSpeed,
+            AutoConstants.kMaxAcceleration)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DriveConstants.kDriveKinematics);
 
         // An example trajectory to follow. All units in meters.
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)), config);
 
         var thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                exampleTrajectory,
-                drivetrain::getPose, // Functional interface to feed supplier
-                DriveConstants.kDriveKinematics,
+            exampleTrajectory,
+            drivetrain::getPose, // Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
 
-                // Position controllers
-                new PIDController(AutoConstants.kPXController, 0, 0),
-                new PIDController(AutoConstants.kPYController, 0, 0),
-                thetaController,
-                drivetrain::setModuleStates,
-                drivetrain);
+            // Position controllers
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+            drivetrain::setModuleStates,
+            drivetrain);
 
         // Reset odometry to the starting pose of the trajectory.
         drivetrain.resetOdometry(exampleTrajectory.getInitialPose());

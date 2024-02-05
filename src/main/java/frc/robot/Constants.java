@@ -11,20 +11,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean constants. This class should not be used for any other
- * purpose. All constants should be declared globally (i.e. public static).
- * Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the constants are needed, to reduce verbosity.
- */
 public final class Constants {
     public static final class DriveConstants {
-        // Driving Parameters - Note that these are not the maximum capable speeds of
-        // the robot, rather the allowed maximum speeds
+        // Allowed maximum speeds of the robot
         public static final double kMaxSpeed = 4.8; // meters per second
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
@@ -32,7 +21,6 @@ public final class Constants {
         public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
-        // Chassis Configuration
         // Distance between centers of right and left wheels on robot
         public static final double kTrackWidth = Units.inchesToMeters(28);
         // Distance between front and back wheels on robot
@@ -76,9 +64,10 @@ public final class Constants {
         public static final boolean kTurningEncoderInverted = true;
 
         // Calculations required for driving motor conversion factors and feed forward
-        public static final double kDrivingMotorFreeSpeed = NeoMotorConstants.kFreeSpeed / 60;
+        public static final double kDrivingMotorFreeSpeed = MotorConstants.kFreeSpeed / 60;
         public static final double kWheelDiameter = 0.0762;
         public static final double kWheelCircumference = kWheelDiameter * Math.PI;
+
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
         public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
         public static final double kDriveWheel = (kDrivingMotorFreeSpeed * kWheelCircumference) / kDrivingMotorReduction;
@@ -133,7 +122,7 @@ public final class Constants {
             kMaxAngularSpeed, kMaxAngularAcceleration);
     }
 
-    public static final class NeoMotorConstants {
+    public static final class MotorConstants {
         public static final double kFreeSpeed = 5676;
     }
 }
