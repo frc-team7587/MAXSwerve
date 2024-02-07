@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.IOConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
@@ -32,7 +32,7 @@ public class RobotContainer {
     // The robot's subsystems
     private final Drivetrain drivetrain = new Drivetrain();
 
-    XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController driverController = new XboxController(IOConstants.kDriverControllerPort);
 
     public RobotContainer() {
         configureButtonBindings();
@@ -42,9 +42,9 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                 () -> drivetrain.drive(
-                    -MathUtil.applyDeadband(0.3 * driverController.getLeftY(), OIConstants.kDriveDeadband), // forward-backward movement
-                    -MathUtil.applyDeadband(0.3 * driverController.getLeftX(), OIConstants.kDriveDeadband), // sideways movement
-                    -MathUtil.applyDeadband(0.5 * driverController.getRightX(), OIConstants.kDriveDeadband), // rotation
+                    -MathUtil.applyDeadband(0.3 * driverController.getLeftY(), IOConstants.kDriveDeadband), // forward-backward movement
+                    -MathUtil.applyDeadband(0.3 * driverController.getLeftX(), IOConstants.kDriveDeadband), // sideways movement
+                    -MathUtil.applyDeadband(0.5 * driverController.getRightX(), IOConstants.kDriveDeadband), // rotation
                     true, // field-relative
                     true  // rate limitings
                 ), drivetrain

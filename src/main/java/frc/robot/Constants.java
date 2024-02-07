@@ -102,7 +102,7 @@ public final class Constants {
         public static final int kTurningMotorCurrentLimit = 20; // amps
     }
 
-    public static final class OIConstants {
+    public static final class IOConstants {
         public static final int kDriverControllerPort = 0;
         public static final double kDriveDeadband = 0.05;
     }
