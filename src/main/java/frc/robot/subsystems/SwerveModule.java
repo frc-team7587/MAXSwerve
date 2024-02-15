@@ -70,14 +70,12 @@ public class SwerveModule {
         turningPIDController.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
         turningPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
 
-        // Set the PID gains for the driving motor.
         drivingPIDController.setP(ModuleConstants.kDrivingP);
         drivingPIDController.setI(ModuleConstants.kDrivingI);
         drivingPIDController.setD(ModuleConstants.kDrivingD);
         drivingPIDController.setFF(ModuleConstants.kDrivingFF);
         drivingPIDController.setOutputRange(ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput);
 
-        // Set the PID gains for the turning motor.
         turningPIDController.setP(ModuleConstants.kTurningP);
         turningPIDController.setI(ModuleConstants.kTurningI);
         turningPIDController.setD(ModuleConstants.kTurningD);
