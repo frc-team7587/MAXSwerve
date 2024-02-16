@@ -108,7 +108,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeed = 3; // m/s^2
+        public static final double kMaxSpeed = 3; // m/s
         public static final double kMaxAcceleration = 3; // m/s^2
         public static final double kMaxAngularSpeed = Math.PI; // rad/s
         public static final double kMaxAngularAcceleration = Math.PI; // rad/s^2
