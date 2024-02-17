@@ -24,13 +24,13 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants;
 
-import frc.robot.subsystems.Drivetrain2;
+import frc.robot.subsystems.DriveTrain;
 
 import java.util.List;
 
 public class RobotContainer {
     // The robot's subsystems
-    private final Drivetrain2 drivetrain = new Drivetrain2();
+    private final DriveTrain drivetrain = new DriveTrain();
 
     XboxController driverController = new XboxController(IOConstants.kDriverControllerPort);
 

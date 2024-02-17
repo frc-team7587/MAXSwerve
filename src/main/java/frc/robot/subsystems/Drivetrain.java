@@ -21,7 +21,7 @@ import frc.utils.SwerveUtils;
 
 import com.kauailabs.navx.frc.AHRS;
 
-public class Drivetrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
     private final SwerveModule frontLeftModule = new SwerveModule(
         DriveConstants.kFrontLeftDrivingMotorID,
         DriveConstants.kFrontLeftTurningMotorID,
@@ -56,17 +56,12 @@ public class Drivetrain extends SubsystemBase {
     // Odometry class for tracking robot pose
     SwerveDriveOdometry odometry = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics,
-        Rotation2d.fromDegrees(getAngle()),
-        new SwerveModulePosition[] {
-            frontLeftModule.getPosition(),
-            frontRightModule.getPosition(),
-            rearLeftModule.getPosition(),
-            rearRightModule.getPosition()
-        }
+        getRotation2d(),
+        getModulePositions()
     );
 
     /** Creates a new DriveSubsystem. */
-    public Drivetrain() {
+    public DriveTrain() {
         resetHeading();
     }
 
@@ -138,37 +133,25 @@ public class Drivetrain extends SubsystemBase {
         double ySpeedDelivered = ySpeedCommand * DriveConstants.kMaxSpeed;
         double rotationDelivered = currentRotation * DriveConstants.kMaxAngularSpeed;
 
-        var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        SwerveModuleState[] desiredStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             isFieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeedDelivered,
                     ySpeedDelivered,
                     rotationDelivered,
-                    gyro.getRotation2d())
+                    getRotation2d())
                 : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotationDelivered));
         
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
-        frontLeftModule.setDesiredState(swerveModuleStates[0]);
-        frontRightModule.setDesiredState(swerveModuleStates[1]);
-        rearLeftModule.setDesiredState(swerveModuleStates[2]);
-        rearRightModule.setDesiredState(swerveModuleStates[3]);
+        setModuleStates(desiredStates);
     }
 
     @Override
     public void periodic() {
-        odometry.update(
-            Rotation2d.fromDegrees(getAngle()),
-            new SwerveModulePosition[] {
-                frontLeftModule.getPosition(),
-                frontRightModule.getPosition(),
-                rearLeftModule.getPosition(),
-                rearRightModule.getPosition()
-            }
-        );
+        odometry.update(getRotation2d(), getModulePositions());
     }
 
     /**
-     * 
+     * Returns the angle of the robot reported by the gyroscope.
      * @return The angle of the robot.
      */
     public double getAngle() {
@@ -176,28 +159,47 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Returns the currently-estimated pose of the robot.
-     * @return The pose.
+     * Returns the Rotation2d of the robot reported by the gyroscope.
+     * @return The Rotation2d of the robot.
      */
-    public Pose2d getPose() {
+    public Rotation2d getRotation2d() {
+        return gyro.getRotation2d();
+    }
+
+    /**
+     * Returns the pose of the robot.
+     * @return The pose of the robot.
+     */
+    public Pose2d getPose2d() {
         return odometry.getPoseMeters();
     }
 
+    /**
+     * Returns the turn rate of the robot.
+     * @return The turn rate of the robot, in degrees per second
+     */
+    public double getTurnRate() {
+        return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    }
+
+    /**
+     * Returns the positions of the modules.
+     * @return The positions of the modules.
+     */
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+            frontLeftModule.getPosition(),
+            frontRightModule.getPosition(),
+            rearLeftModule.getPosition(),
+            rearRightModule.getPosition()
+        };
+    }
     /**
      * Resets the odometry to the specified pose.
      * @param pose The pose to which to set the odometry.
      */
     public void resetOdometry(Pose2d pose) {
-        odometry.resetPosition(
-            Rotation2d.fromDegrees(getAngle()),
-            new SwerveModulePosition[] {
-                frontLeftModule.getPosition(),
-                frontRightModule.getPosition(),
-                rearLeftModule.getPosition(),
-                rearRightModule.getPosition()
-            },
-            pose
-        );
+        odometry.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
 
     /** Sets the wheels into an X formation to prevent movement. */
@@ -210,7 +212,6 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Sets the swerve ModuleStates.
-     *
      * @param desiredStates The desired SwerveModule states.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -229,24 +230,8 @@ public class Drivetrain extends SubsystemBase {
         rearRightModule.resetEncoder();
     }
 
-    /** Zeroes the heading of the robot. */
+    /** Resets the heading of the robot to zero. */
     public void resetHeading() {
         gyro.reset();
-    }
-
-    /**
-     * Returns the heading of the robot.
-     * @return the robot's heading in degrees, from -180 to 180
-     */
-    public double getHeading() {
-        return Rotation2d.fromDegrees(getAngle()).getDegrees();
-    }
-
-    /**
-     * Returns the turn rate of the robot.
-     * @return The turn rate of the robot, in degrees per second
-     */
-    public double getTurnRate() {
-        return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
     }
 }
