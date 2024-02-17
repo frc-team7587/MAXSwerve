@@ -24,13 +24,13 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IOConstants;
 
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain2;
 
 import java.util.List;
 
 public class RobotContainer {
     // The robot's subsystems
-    private final Drivetrain drivetrain = new Drivetrain();
+    private final Drivetrain2 drivetrain = new Drivetrain2();
 
     XboxController driverController = new XboxController(IOConstants.kDriverControllerPort);
 
@@ -84,7 +84,7 @@ public class RobotContainer {
 
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
             exampleTrajectory,
-            drivetrain::getPose, // Functional interface to feed supplier
+            drivetrain::getPose2d, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
 
             // Position controllers
